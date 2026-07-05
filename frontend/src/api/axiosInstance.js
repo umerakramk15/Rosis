@@ -1,9 +1,12 @@
-import axios from 'axios';
+import axios from "axios";
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -11,13 +14,13 @@ const axiosInstance = axios.create({
 // Automatically attach JWT token to every request
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // ── Response Interceptor ──────────────────────────────────────────────
@@ -32,29 +35,29 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage.getItem('refreshToken');
-        if (!refreshToken) throw new Error('No refresh token');
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) throw new Error("No refresh token");
 
-        const res = await axios.post('http://localhost:5000/api/auth/refresh-token', {
+        const res = await axios.post(`${API_BASE_URL}/auth/refresh-token`, {
           refreshToken,
         });
 
         const newToken = res.data.data.token;
-        localStorage.setItem('token', newToken);
+        localStorage.setItem("token", newToken);
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
 
         return axiosInstance(originalRequest); // Retry original request
       } catch (err) {
         // Refresh failed — logout user
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
-        window.location.href = '/login';
+        localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("user");
+        window.location.href = "/login";
       }
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosInstance;
