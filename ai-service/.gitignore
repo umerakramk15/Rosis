@@ -1,0 +1,28 @@
+# .gitignore (in root of your project)
+
+# Environment files (NEVER commit these!)
+.env
+.env.local
+.env.*.local
+*.env
+**/.env
+**/.env.local
+
+# Node modules
+node_modules/
+**/node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo

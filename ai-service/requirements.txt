@@ -1,0 +1,10 @@
+flask
+groq
+pandas
+scikit-learn
+joblib
+gunicorn
+Pillow
+requests
+numpy
+reportlab==4.0.4
