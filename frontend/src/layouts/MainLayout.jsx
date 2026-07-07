@@ -344,8 +344,8 @@ const MainLayout = () => {
             "Tops",
             "Bottoms",
             "Dresses",
-            "Outerwear",
-            "Accessories",
+            "Watches",
+            "Bags",
             "Shoes",
             "Beauty",
           ].map((cat) => (

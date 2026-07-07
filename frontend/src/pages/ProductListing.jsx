@@ -535,6 +535,8 @@ export default function ProductListingPage() {
   const { addToCart } = useCartStore();
   const { user } = useAuthStore();
 
+  
+
   // Fetch from backend
   useEffect(() => {
     const fetchProducts = async () => {

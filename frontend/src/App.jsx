@@ -25,9 +25,11 @@ import MerchantCoachingPage from "./pages/MerchantCoaching";
 import MerchantCompliancePage from "./pages/MerchantCompliance";
 import DynamicPricingPage from "./pages/DynamicPricing";
 import ReturnRiskPage from "./pages/ReturnRisk";
+import ScrollToTop from "./components/ScrollToTop";
 
 const App = () => {
   return (
+    ScrollToTop(),
     <Routes>
       <Route element={<MainLayout />}>
         <Route path="/" element={<GirlyShop />} />
