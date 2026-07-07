@@ -384,7 +384,7 @@ export default function CartPage() {
         }
         .page-root { min-height: 100vh; background: linear-gradient(160deg, #fdf8f5 0%, #fef0f0 40%, #fdf4f8 100%); font-family: 'Nunito', sans-serif; }
         .page-inner { max-width: 1180px; margin: 0 auto; padding: clamp(24px,4vw,40px) clamp(16px,5vw,32px); display: grid; grid-template-columns: 1fr 380px; gap: 28px; align-items: start; }
-        @media (max-width: 900px) { .page-inner { grid-template-columns: 1fr; } .summary-col { order: -1; } }
+        @media (max-width: 900px) { .page-inner { grid-template-columns: 1fr; } }
         .page-heading { margin-bottom: 24px; }
         .page-eyebrow { font-size: .68rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--rose); margin-bottom: 5px; }
         .page-title { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem,3vw,2.2rem); color: var(--plum); font-weight: 700; }

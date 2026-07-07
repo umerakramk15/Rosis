@@ -373,19 +373,7 @@ export default function CheckoutPage() {
         input, select, button { font-family:inherit; }
       `}</style>
 
-      {/* TOPBAR */}
-      <header style={{ background: "white", height: 64, borderBottom: "1.5px solid #f0d5d8", padding: "0 clamp(16px,5vw,48px)", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 100, boxShadow: "0 2px 16px rgba(140,40,60,.06)" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => navigate("/")}>
-          <div style={{ width: 34, height: 34, borderRadius: 11, background: "linear-gradient(135deg,#c9727a,#e8a0a0)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, color: "white" }}>✿</div>
-          <span style={{ fontFamily: "serif", fontWeight: 700, fontSize: "1.3rem", color: "#8b3a4a" }}>Rosée</span>
-        </div>
-        {!stepDone && (
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <Ic d={P.lock} size={13} c="#9a7080" sw={2} />
-            <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: ".72rem", color: "#9a7080", fontWeight: 600 }}>Secure Checkout</span>
-          </div>
-        )}
-      </header>
+      
 
       {/* STEP INDICATOR */}
       {!stepDone && (

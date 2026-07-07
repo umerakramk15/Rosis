@@ -129,6 +129,21 @@ function ChevronRight() {
 }
 
 const NAV_LINKS = ["New Arrivals", "Clothing", "Accessories", "Beauty", "Sale"];
+const FILTER_MAP = {
+  "New Arrivals": ["All"], // shows all products
+  Clothing: ["shirts", "pants"],
+  Accessories: ["bags", "watches"], // adjust as needed
+};
+
+const SUB_NAV_FILTER_MAP = {
+  All: ["All"],
+  Tops: ["shirts"],
+  Bottoms: ["pants"],
+  Dresses: ["shirts", "pants"],
+  Watches: ["watches"],
+  Bags: ["bags"],
+  Shoes: ["shoes"],
+};
 
 const MainLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -159,6 +174,21 @@ const MainLayout = () => {
       });
     }
   }, [user]);
+
+  const handleNavClick = (link) => {
+    if (link === "Beauty" || link === "Sale") {
+      // ignore these – optionally do nothing or redirect to home
+      return;
+    }
+    const categories = FILTER_MAP[link] || ["All"];
+    navigate("/products", { state: { initialCategories: categories } });
+  };
+
+  const handleSubNavClick = (cat) => {
+    if (cat === "Beauty") return; // ignore
+    const categories = SUB_NAV_FILTER_MAP[cat] || ["All"];
+    navigate("/products", { state: { initialCategories: categories } });
+  };
 
   return (
     <div
@@ -221,20 +251,20 @@ const MainLayout = () => {
             </div>
             <nav className="hidden lg:flex items-center gap-8">
               {NAV_LINKS.map((link) => (
-                <a
+                <span
                   key={link}
-                  href="#"
                   className="nav-link"
-                  style={{ color: "#3d2a2a" }}
+                  style={{ color: "#3d2a2a", cursor: "pointer" }}
+                  onClick={() => handleNavClick(link)}
                 >
                   {link}
-                </a>
+                </span>
               ))}
             </nav>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => navigate("/search")}
-                className="hidden sm:flex p-2 rounded-full hover:bg-rose-50 transition-colors"
+                className="sm:flex p-2 rounded-full hover:bg-rose-50 transition-colors"
                 style={{ color: "#8b3a4a" }}
               >
                 <SearchIcon />
@@ -351,18 +381,16 @@ const MainLayout = () => {
           ].map((cat) => (
             <button
               key={cat}
-              onClick={() =>
-                setActiveCategory(cat === activeCategory ? null : cat)
-              }
+              onClick={() => handleSubNavClick(cat)}
               className="text-xs tracking-wider transition-colors"
               style={{
                 fontFamily: "Jost, sans-serif",
                 letterSpacing: "0.1em",
-                color: activeCategory === cat ? "#c9727a" : "#6b4a4a",
-                fontWeight: activeCategory === cat ? "600" : "400",
-                borderBottom:
-                  activeCategory === cat ? "1.5px solid #c9727a" : "none",
+                color: "#6b4a4a", // default; highlight not needed because we navigate away
+                fontWeight: "400",
+                borderBottom: "none",
                 paddingBottom: "2px",
+                cursor: "pointer",
               }}
             >
               {cat}
@@ -398,18 +426,18 @@ const MainLayout = () => {
             </div>
             <div className="flex-1 overflow-y-auto p-5 space-y-1">
               {NAV_LINKS.map((link) => (
-                <a
+                <span
                   key={link}
-                  href="#"
                   className="flex items-center justify-between py-3 border-b"
                   style={{
                     borderColor: "#f9f0f0",
                     color: "#3d2a2a",
                     fontFamily: "Jost, sans-serif",
                   }}
+                   onClick={() => handleNavClick(link)}
                 >
                   {link} <ChevronRight />
-                </a>
+                </span>
               ))}
               <div className="pt-4 space-y-3">
                 {user ? (

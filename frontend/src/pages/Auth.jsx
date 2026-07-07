@@ -1053,19 +1053,7 @@ export default function AuthPage() {
         .logo-badge {
           display: inline-flex; align-items: center; gap: 0.5rem;
         }
-        .logo-dot {
-          width: 36px; height: 36px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #f9c5c5, #e8a0a0);
-          display: flex; align-items: center; justify-content: center;
-          font-size: 16px;
-        }
-        .logo-name {
-          font-family: 'Playfair Display', serif;
-          font-size: 1.4rem; font-weight: 700;
-          color: white; letter-spacing: -0.01em;
-        }
-
+        
         .visual-label {
           font-family: 'Jost', sans-serif;
           font-size: 0.65rem; font-weight: 700;
@@ -1328,8 +1316,8 @@ export default function AuthPage() {
         <div className="visual-content">
           {/* Logo */}
           <div className="logo-badge">
-            <div className="logo-dot">✿</div>
-            <span className="logo-name">Rosée</span>
+            <div className="logo-dot"></div>
+            <span className="logo-name"></span>
           </div>
 
           {/* Quote block */}
@@ -1413,30 +1401,6 @@ export default function AuthPage() {
       {/* ══ RIGHT — FORM PANEL ═══════════════════════════════════════════════ */}
       <div className="form-panel">
         <div className="form-card">
-          {/* Mobile logo */}
-          <div className="mobile-logo">
-            <div
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: "50%",
-                background: "linear-gradient(135deg,#f9c5c5,#e8a0a0)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 16,
-              }}
-            >
-              ✿
-            </div>
-            <span
-              className="display-font text-xl font-bold"
-              style={{ color: "#8b3a4a" }}
-            >
-              Rosée
-            </span>
-          </div>
-
           {/* Panel switcher tabs (login / register) */}
           {panel !== "forgot" && (
             <div
@@ -1483,29 +1447,6 @@ export default function AuthPage() {
               <ForgotPanel onBack={() => setPanel("login")} />
             )}
           </div>
-
-          {/* Footer */}
-          <p
-            className="text-center mt-8 text-xs"
-            style={{ color: "#c0a8a8", fontFamily: "Jost,sans-serif" }}
-          >
-            © 2026 Rosée · Crafted with ♡ ·{" "}
-            <a
-              href="#"
-              className="hover:underline"
-              style={{ color: "#c9727a" }}
-            >
-              Privacy
-            </a>
-            {" · "}
-            <a
-              href="#"
-              className="hover:underline"
-              style={{ color: "#c9727a" }}
-            >
-              Terms
-            </a>
-          </p>
         </div>
       </div>
     </div>

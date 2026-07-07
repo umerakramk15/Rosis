@@ -5,6 +5,7 @@ import useCartStore from "../store/cartStore";
 import useAuthStore from "../store/authStore";
 import { toast } from "react-toastify";
 import { wishlistAPI } from "../api/index";
+import { useLocation } from "react-router-dom";
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
 const CATEGORIES = [
   "All",
@@ -531,11 +532,18 @@ export default function ProductListingPage() {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const { addToCart } = useCartStore();
   const { user } = useAuthStore();
 
-  
+    useEffect(() => {
+    const state = location.state;
+    if (state?.initialCategories) {
+      setCats(state.initialCategories);
+      setPage(1);
+    }
+  }, [location.state]);
 
   // Fetch from backend
   useEffect(() => {
