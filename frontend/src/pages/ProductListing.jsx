@@ -372,8 +372,7 @@ function ProductCardList({
     >
       {/* Image */}
       <div
-        className="relative overflow-hidden flex-shrink-0"
-        style={{ width: "100%", maxWidth: "220px", minHeight: "200px" }}
+        className="relative overflow-hidden w-full sm:w-[220px] sm:flex-shrink-0 aspect-square"
       >
         <img
           src={
