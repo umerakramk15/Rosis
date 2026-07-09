@@ -43,6 +43,30 @@ const GLOBAL_CSS = `
   .product-row:hover { background:#fdf0f2 !important; }
   .action-pill:hover { transform:translateY(-2px) scale(1.04) !important; }
   .tab-btn:hover { background:#fdf5f5 !important; color:#c9727a !important; }
+
+  /* Responsive table → card on mobile */
+  @media (max-width: 640px) {
+    .product-table-header { display: none !important; }
+    .product-row {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 10px !important;
+      padding: 16px !important;
+      border-radius: 16px !important;
+      border: 1.5px solid #f0d5d8 !important;
+      margin-bottom: 10px !important;
+    }
+    .product-row-mobile-top {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+    }
+    .product-row-mobile-stats {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr 1fr !important;
+      gap: 8px !important;
+    }
+  }
 `;
 
 /* ═══════════════════════════════ PALETTE ═══════════════════════════════ */
@@ -880,6 +904,7 @@ export default function MerchantCoachingPage() {
 
       {/* TOPBAR */}
       <header
+        className="flex items-center gap-3 sm:gap-4 flex-wrap sm:flex-nowrap"
         style={{
           position: "sticky",
           top: 0,
@@ -888,11 +913,8 @@ export default function MerchantCoachingPage() {
           backdropFilter: "blur(18px)",
           borderBottom: `1.5px solid ${C.border}`,
           boxShadow: "0 2px 20px rgba(140,40,60,.07)",
-          height: 66,
-          display: "flex",
-          alignItems: "center",
-          padding: "0 clamp(16px,4vw,40px)",
-          gap: 16,
+          minHeight: 66,
+          padding: "8px clamp(16px,4vw,40px)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -960,11 +982,12 @@ export default function MerchantCoachingPage() {
           </div>
         </div>
 
-        <div style={{ flex: 1 }} />
+        <div className="flex-1 hidden sm:block" />
 
+        {/* Store badge — hide on very small screens */}
         <div
+          className="hidden sm:flex"
           style={{
-            display: "flex",
             alignItems: "center",
             gap: 6,
             padding: "6px 14px",
@@ -986,7 +1009,9 @@ export default function MerchantCoachingPage() {
           </span>
         </div>
 
+        {/* Last updated — hide on mobile */}
         <p
+          className="hidden md:block"
           style={{
             fontFamily: "'Mulish',sans-serif",
             fontSize: ".66rem",
@@ -1002,6 +1027,7 @@ export default function MerchantCoachingPage() {
           ref={refreshBtnRef}
           onClick={handleRefresh}
           disabled={refreshing}
+          className="ml-auto sm:ml-0"
           style={{
             display: "flex",
             alignItems: "center",
@@ -1021,6 +1047,7 @@ export default function MerchantCoachingPage() {
             textTransform: "uppercase",
             boxShadow: `0 4px 16px ${C.rose}44`,
             transition: "all .3s cubic-bezier(.34,1.1,.64,1)",
+            whiteSpace: "nowrap",
           }}
           onMouseEnter={(e) => {
             if (!refreshing) {
@@ -1117,14 +1144,10 @@ export default function MerchantCoachingPage() {
             </div>
           ))}
 
+          {/* Hero inner — stack on mobile, row on sm+ */}
           <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 20,
-              flexWrap: "wrap",
-              position: "relative",
-            }}
+            className="flex flex-col sm:flex-row items-start sm:items-center gap-5"
+            style={{ position: "relative" }}
           >
             <div style={{ flexShrink: 0, position: "relative" }}>
               <div
@@ -1243,7 +1266,9 @@ export default function MerchantCoachingPage() {
               </div>
             </div>
 
+            {/* Health ring — move to bottom on mobile */}
             <div
+              className="self-center sm:self-auto mt-2 sm:mt-0"
               style={{
                 flexShrink: 0,
                 textAlign: "center",
@@ -1688,10 +1713,10 @@ export default function MerchantCoachingPage() {
             </button>
           </div>
 
-          {/* Header */}
+          {/* Table Header — hidden on mobile via CSS class */}
           <div
+            className="product-table-header hidden sm:grid"
             style={{
-              display: "grid",
               gridTemplateColumns: "2fr 1fr 1fr 1fr 120px 80px",
               gap: 8,
               padding: "8px 14px",
@@ -1733,6 +1758,74 @@ export default function MerchantCoachingPage() {
               (isUp
                 ? `+${Math.round(Math.random() * 30)}%`
                 : `-${Math.round(Math.random() * 15)}%`);
+
+            const emoji = p.name?.includes("Dress")
+              ? "👗"
+              : p.name?.includes("Bag")
+                ? "👜"
+                : p.name?.includes("Earrings")
+                  ? "💎"
+                  : p.name?.includes("Heels")
+                    ? "👠"
+                    : "📦";
+
+            const stockEl =
+              p.stock === 0 ? (
+                <span
+                  style={{
+                    fontFamily: "'Mulish',sans-serif",
+                    fontSize: ".65rem",
+                    fontWeight: 900,
+                    background: "rgba(220,38,38,.1)",
+                    color: "#dc2626",
+                    padding: "3px 9px",
+                    borderRadius: 999,
+                    letterSpacing: ".05em",
+                  }}
+                >
+                  OUT OF STOCK
+                </span>
+              ) : p.stock < 15 ? (
+                <span
+                  style={{
+                    fontFamily: "'Mulish',sans-serif",
+                    fontSize: ".7rem",
+                    fontWeight: 800,
+                    color: "#d97706",
+                  }}
+                >
+                  ⚠ {p.stock} left
+                </span>
+              ) : (
+                <span
+                  style={{
+                    fontFamily: "'Mulish',sans-serif",
+                    fontSize: ".75rem",
+                    fontWeight: 700,
+                    color: C.mint,
+                  }}
+                >
+                  ✓ {p.stock}
+                </span>
+              );
+
+            const trendEl = (
+              <span
+                style={{
+                  fontFamily: "'Mulish',sans-serif",
+                  fontSize: ".72rem",
+                  fontWeight: 900,
+                  color: isUp ? C.mint : "#ef4444",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 3,
+                }}
+              >
+                <span style={{ fontSize: ".8rem" }}>{isUp ? "↑" : "↓"}</span>
+                {trendValue}
+              </span>
+            );
+
             return (
               <div
                 key={p.id || i}
@@ -1752,6 +1845,8 @@ export default function MerchantCoachingPage() {
                   animation: `slideLeft .4s ${0.05 * i}s ease both`,
                 }}
               >
+                {/* — Desktop layout (grid cells) — */}
+                {/* Product name cell */}
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                   <div
                     style={{
@@ -1766,15 +1861,7 @@ export default function MerchantCoachingPage() {
                       flexShrink: 0,
                     }}
                   >
-                    {p.name?.includes("Dress")
-                      ? "👗"
-                      : p.name?.includes("Bag")
-                        ? "👜"
-                        : p.name?.includes("Earrings")
-                          ? "💎"
-                          : p.name?.includes("Heels")
-                            ? "👠"
-                            : "📦"}
+                    {emoji}
                   </div>
                   <div>
                     <p
@@ -1820,46 +1907,7 @@ export default function MerchantCoachingPage() {
                 >
                   {p.orders}
                 </p>
-                <div>
-                  {p.stock === 0 ? (
-                    <span
-                      style={{
-                        fontFamily: "'Mulish',sans-serif",
-                        fontSize: ".65rem",
-                        fontWeight: 900,
-                        background: "rgba(220,38,38,.1)",
-                        color: "#dc2626",
-                        padding: "3px 9px",
-                        borderRadius: 999,
-                        letterSpacing: ".05em",
-                      }}
-                    >
-                      OUT OF STOCK
-                    </span>
-                  ) : p.stock < 15 ? (
-                    <span
-                      style={{
-                        fontFamily: "'Mulish',sans-serif",
-                        fontSize: ".7rem",
-                        fontWeight: 800,
-                        color: "#d97706",
-                      }}
-                    >
-                      ⚠ {p.stock} left
-                    </span>
-                  ) : (
-                    <span
-                      style={{
-                        fontFamily: "'Mulish',sans-serif",
-                        fontSize: ".75rem",
-                        fontWeight: 700,
-                        color: C.mint,
-                      }}
-                    >
-                      ✓ {p.stock}
-                    </span>
-                  )}
-                </div>
+                <div>{stockEl}</div>
                 <div>
                   <div
                     style={{
@@ -1891,23 +1939,13 @@ export default function MerchantCoachingPage() {
                     {pct}% of top
                   </p>
                 </div>
-                <span
-                  style={{
-                    fontFamily: "'Mulish',sans-serif",
-                    fontSize: ".72rem",
-                    fontWeight: 900,
-                    color: isUp ? C.mint : "#ef4444",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 3,
-                  }}
-                >
-                  <span style={{ fontSize: ".8rem" }}>{isUp ? "↑" : "↓"}</span>
-                  {trendValue}
-                </span>
+                {trendEl}
               </div>
             );
           })}
+
+          {/* Mobile card view — shown only on xs screens via CSS override */}
+          {/* The .product-row CSS in GLOBAL_CSS handles the layout switch */}
         </div>
 
         {/* QUICK ACTIONS - Links to existing pages */}
@@ -1925,7 +1963,9 @@ export default function MerchantCoachingPage() {
           >
             Quick Actions
           </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+          <div
+            className="grid grid-cols-2 sm:flex sm:flex-wrap gap-3"
+          >
             {QUICK_ACTIONS.map((a, i) => (
               <button
                 key={i}
@@ -1934,6 +1974,7 @@ export default function MerchantCoachingPage() {
                 style={{
                   display: "flex",
                   alignItems: "center",
+                  justifyContent: "center",
                   gap: 8,
                   padding: "11px 20px",
                   borderRadius: 14,
@@ -1968,15 +2009,12 @@ export default function MerchantCoachingPage() {
 
         {/* FOOTER */}
         <div
+          className="flex flex-col sm:flex-row items-center sm:items-center justify-between gap-4"
           style={{
             marginTop: 52,
             paddingTop: 28,
             borderTop: `1.5px solid ${C.border}`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
             flexWrap: "wrap",
-            gap: 14,
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 9 }}>

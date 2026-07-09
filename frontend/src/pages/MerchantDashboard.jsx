@@ -934,6 +934,7 @@ function AIChat() {
 
 /* ════════════════════════════════════════════════════════════════
    MAIN DASHBOARD - Fully Dynamic with SAME DESIGN as mock code
+   + Responsive sidebar (open by default on lg, overlay on mobile)
 ════════════════════════════════════════════════════════════════ */
 export default function MerchantDashboard() {
   const navigate = useNavigate();
@@ -962,6 +963,24 @@ export default function MerchantDashboard() {
   const [ordersSeries, setOrdersSeries] = useState([
     18, 24, 21, 30, 27, 35, 32, 38, 36, 44, 47, 52,
   ]);
+
+  /* ── NEW: sidebar open/close state ──
+     Open by default on large screens, closed by default on mobile. */
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 1024) {
+      setSidebarOpen(false);
+    }
+  }, []);
+
+  // Close sidebar automatically after navigating on mobile
+  const handleNavClick = (path) => {
+    navigate(path);
+    if (typeof window !== "undefined" && window.innerWidth < 1024) {
+      setSidebarOpen(false);
+    }
+  };
 
   useEffect(() => {
     if (!user) {
@@ -1141,25 +1160,27 @@ export default function MerchantDashboard() {
         ::-webkit-scrollbar { width:4px; height:4px; }
         ::-webkit-scrollbar-track { background:transparent; }
         ::-webkit-scrollbar-thumb { background:#e8a0a0; border-radius:4px; }
-        @media(max-width:900px){ .sidebar-desktop{display:none!important} .main-content{margin-left:0!important} }
       `}</style>
 
-      {/* SIDEBAR - Same as mock code */}
+      {/* MOBILE OVERLAY BACKDROP - shows only when sidebar open on small screens */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-[190] lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* SIDEBAR - same visual design, now responsive via Tailwind transform classes */}
       <aside
-        className="sidebar-desktop"
+        className={`fixed top-0 left-0 h-screen w-[220px] flex-shrink-0 z-[200] transition-transform duration-300 ease-in-out ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
         style={{
-          width: 220,
-          flexShrink: 0,
-          height: "100vh",
-          position: "fixed",
-          top: 0,
-          left: 0,
           background:
             "linear-gradient(180deg,#1c1016 0%,#2d1a22 60%,#1a1020 100%)",
           borderRight: "1px solid rgba(255,255,255,.06)",
           display: "flex",
           flexDirection: "column",
-          zIndex: 200,
           boxShadow: "4px 0 32px rgba(0,0,0,.2)",
         }}
       >
@@ -1167,6 +1188,9 @@ export default function MerchantDashboard() {
           style={{
             padding: "26px 22px 20px",
             borderBottom: "1px solid rgba(255,255,255,.07)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -1212,6 +1236,25 @@ export default function MerchantDashboard() {
               </p>
             </div>
           </div>
+
+          {/* NEW: close button for sidebar (visible on all screen sizes) */}
+          <button
+            onClick={() => setSidebarOpen(false)}
+            aria-label="Close sidebar"
+            className="flex items-center justify-center flex-shrink-0"
+            style={{
+              width: 28,
+              height: 28,
+              borderRadius: 8,
+              background: "rgba(255,255,255,.06)",
+              border: "1px solid rgba(255,255,255,.1)",
+              color: "rgba(255,255,255,.6)",
+              cursor: "pointer",
+              fontSize: ".8rem",
+            }}
+          >
+            ✕
+          </button>
         </div>
         <nav
           style={{
@@ -1228,7 +1271,7 @@ export default function MerchantDashboard() {
             return (
               <button
                 key={item.id}
-                onClick={() => navigate(item.path)}
+                onClick={() => handleNavClick(item.path)}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -1328,14 +1371,15 @@ export default function MerchantDashboard() {
         </div>
       </aside>
 
-      {/* MAIN CONTENT */}
+      {/* MAIN CONTENT - margin-left responds to sidebarOpen only on lg+, mobile is always full width */}
       <main
-        className="main-content"
+        className={`flex-1 transition-all duration-300 ease-in-out ml-0 ${
+          sidebarOpen ? "lg:ml-[220px]" : "lg:ml-0"
+        }`}
         style={{
-          marginLeft: 220,
-          flex: 1,
           minHeight: "100vh",
           overflowX: "hidden",
+          width: "100%",
         }}
       >
         <header
@@ -1353,32 +1397,53 @@ export default function MerchantDashboard() {
             boxShadow: "0 2px 16px rgba(140,40,60,.05)",
           }}
         >
-          <div>
-            <h1
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            {/* NEW: hamburger / sidebar toggle button */}
+            <button
+              onClick={() => setSidebarOpen((v) => !v)}
+              aria-label="Toggle sidebar"
+              className="flex items-center justify-center flex-shrink-0"
               style={{
-                fontFamily: "'Cormorant Garamond',serif",
-                fontWeight: 700,
-                fontSize: "1.35rem",
-                color: "#1e1018",
+                width: 36,
+                height: 36,
+                borderRadius: 10,
+                background: "#fdf5f5",
+                border: "1.5px solid #f0d5d8",
+                cursor: "pointer",
+                color: "#c9727a",
+                fontSize: "1rem",
               }}
             >
-              Good morning,{" "}
-              <em style={{ color: "#c9727a" }}>
-                {user?.name?.split(" ")[0] || "Merchant"}
-              </em>{" "}
-              ✿
-            </h1>
-            <p
-              style={{
-                fontFamily: "'DM Sans',sans-serif",
-                fontSize: ".7rem",
-                color: "#9a7080",
-                fontWeight: 500,
-                marginTop: 1,
-              }}
-            >
-              Here's what's happening in your store today
-            </p>
+              ☰
+            </button>
+            <div>
+              <h1 className="hidden sm:block"
+                style={{
+                  fontFamily: "'Cormorant Garamond',serif",
+                  fontWeight: 700,
+                  fontSize: "1.35rem",
+                  color: "#1e1018",
+                }}
+              >
+                Good morning,{" "}
+                <em style={{ color: "#c9727a" }}>
+                  {user?.name?.split(" ")[0] || "Merchant"}
+                </em>{" "}
+                ✿
+              </h1>
+              <p
+                style={{
+                  fontFamily: "'DM Sans',sans-serif",
+                  fontSize: ".7rem",
+                  color: "#9a7080",
+                  fontWeight: 500,
+                  marginTop: 1,
+                }}
+                className="hidden sm:block"
+              >
+                Here's what's happening in your store today
+              </p>
+            </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div
@@ -1390,6 +1455,7 @@ export default function MerchantDashboard() {
                 padding: 4,
                 border: "1.5px solid #f0d5d8",
               }}
+              className="hidden sm:flex"
             >
               {["7d", "30d", "90d"].map((d) => (
                 <button
@@ -1449,26 +1515,14 @@ export default function MerchantDashboard() {
           }}
         >
           {/* KPI Cards Row */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4,1fr)",
-              gap: 16,
-            }}
-          >
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
             {kpiCards.map((kpi, i) => (
               <KpiCard key={i} {...kpi} />
             ))}
           </div>
 
           {/* Mid Row: Chart + Channel Mix + Quick Stats */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 260px",
-              gap: 16,
-            }}
-          >
+          <div className="grid grid-cols-1 xl:grid-cols-[1fr_260px] gap-4">
             <div
               style={{
                 background: "white",
@@ -1484,6 +1538,8 @@ export default function MerchantDashboard() {
                   alignItems: "flex-start",
                   justifyContent: "space-between",
                   marginBottom: 18,
+                  flexWrap: "wrap",
+                  gap: 10,
                 }}
               >
                 <div>
@@ -1551,7 +1607,9 @@ export default function MerchantDashboard() {
                   ))}
                 </div>
               </div>
-              <BarChart data={revenueSeries} labels={MONTHS} color="#c9727a" />
+              <div className="overflow-x-auto">
+                <BarChart data={revenueSeries} labels={MONTHS} color="#c9727a" />
+              </div>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -1623,13 +1681,7 @@ export default function MerchantDashboard() {
                   </div>
                 </div>
               </div>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: 10,
-                }}
-              >
+              <div className="grid grid-cols-2 gap-2.5">
                 <div
                   style={{
                     background: "white",
@@ -1787,7 +1839,10 @@ export default function MerchantDashboard() {
                   View All Orders
                 </button>
               </div>
-              <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+              <div
+                style={{ display: "flex", gap: 4, flexWrap: "nowrap" }}
+                className="overflow-x-auto"
+              >
                 {[
                   "all",
                   "pending",
@@ -1812,6 +1867,8 @@ export default function MerchantDashboard() {
                         borderRadius: "10px 10px 0 0",
                         border: "none",
                         cursor: "pointer",
+                        whiteSpace: "nowrap",
+                        flexShrink: 0,
                         background: active ? "white" : "transparent",
                         color: active ? "#c9727a" : "#9a7080",
                         borderBottom: active
@@ -1860,6 +1917,7 @@ export default function MerchantDashboard() {
                           color: "#9a7080",
                           padding: "10px 16px",
                           textAlign: "left",
+                          whiteSpace: "nowrap",
                         }}
                       >
                         {h}
@@ -1890,6 +1948,7 @@ export default function MerchantDashboard() {
                             padding: "13px 16px",
                             fontWeight: 700,
                             color: "#c9727a",
+                            whiteSpace: "nowrap",
                           }}
                         >
                           #{order._id?.slice(-8).toUpperCase()}
@@ -1899,17 +1958,18 @@ export default function MerchantDashboard() {
                             padding: "13px 16px",
                             fontWeight: 600,
                             color: "#1e1018",
+                            whiteSpace: "nowrap",
                           }}
                         >
                           {order.userId?.name || "Customer"}
                         </td>
-                        <td style={{ padding: "13px 16px", color: "#9a7080" }}>
+                        <td style={{ padding: "13px 16px", color: "#9a7080", whiteSpace: "nowrap" }}>
                           {order.items?.length || 0} item
                         </td>
-                        <td style={{ padding: "13px 16px", fontWeight: 700 }}>
+                        <td style={{ padding: "13px 16px", fontWeight: 700, whiteSpace: "nowrap" }}>
                           Rs. {order.total?.toLocaleString()}
                         </td>
-                        <td style={{ padding: "13px 16px" }}>
+                        <td style={{ padding: "13px 16px", whiteSpace: "nowrap" }}>
                           <span
                             style={{
                               display: "inline-flex",
@@ -1939,11 +1999,12 @@ export default function MerchantDashboard() {
                             padding: "13px 16px",
                             fontSize: ".72rem",
                             color: "#9a7080",
+                            whiteSpace: "nowrap",
                           }}
                         >
                           {new Date(order.createdAt).toLocaleDateString()}
                         </td>
-                        <td style={{ padding: "13px 16px" }}>
+                        <td style={{ padding: "13px 16px", whiteSpace: "nowrap" }}>
                           <button
                             onClick={() => navigate("/merchant/orders")}
                             style={{
@@ -1968,13 +2029,7 @@ export default function MerchantDashboard() {
           </div>
 
           {/* Bottom Row: Top Products + AI Alerts + AI Chat */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 360px",
-              gap: 16,
-            }}
-          >
+          <div className="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-4">
             {/* Top Products */}
             <div
               style={{
@@ -1992,6 +2047,8 @@ export default function MerchantDashboard() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
+                  flexWrap: "wrap",
+                  gap: 10,
                 }}
               >
                 <div>
@@ -2090,7 +2147,7 @@ export default function MerchantDashboard() {
                       >
                         {i + 1}
                       </div>
-                      <div style={{ flex: 1 }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
                         <div
                           style={{
                             display: "flex",

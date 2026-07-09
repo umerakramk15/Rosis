@@ -1014,7 +1014,7 @@ export default function ReturnRiskPage() {
               margin: "0 8px",
             }}
           />
-          <span
+          <span className="hidden sm:block"
             style={{
               fontFamily: "'DM Sans',sans-serif",
               fontSize: ".68rem",

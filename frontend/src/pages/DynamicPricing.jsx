@@ -242,7 +242,7 @@ export default function DynamicPricingPage() {
   const [bulkSel, setBulkSel] = useState(new Set());
   const [aiRunning, setAiRunning] = useState(false);
   const [aiTarget, setAiTarget] = useState(null);
-  const [viewMode, setViewMode] = useState("table");
+  const [viewMode, setViewMode] = useState("cards");
   const [hlRow, setHlRow] = useState(null);
 
   // Fetch products from API
@@ -515,9 +515,9 @@ export default function DynamicPricingPage() {
           </button>
           <div style={{ width:32,height:32,borderRadius:10,background:`linear-gradient(135deg,${T.rose},${T.roseLt})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,color:"white" }}>✿</div>
           <span style={{ fontFamily:"'Cormorant Garamond',serif", fontWeight:700, fontSize:"1.28rem", color:T.roseDk }}>Rosée</span>
-          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:".7rem", fontWeight:600, color:T.muted, marginLeft:6, padding:"2px 10px", borderRadius:999, background:"#fdf5f5", border:`1px solid ${T.border}` }}>Merchant</span>
+          <span className="hidden sm:block" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:".7rem", fontWeight:600, color:T.muted, marginLeft:6, padding:"2px 10px", borderRadius:999, background:"#fdf5f5", border:`1px solid ${T.border}` }}>Merchant</span>
         </div>
-        <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+        <div className="hidden sm:flex" style={{ alignItems:"center", gap:8 }}>
           <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:".72rem", color:T.muted }}>Dynamic Pricing</span>
           <div style={{ width:6, height:6, borderRadius:"50%", background:T.green, animation:"pulse 2s ease infinite" }}/>
           <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:".72rem", fontWeight:700, color:T.green }}>AI Active</span>
@@ -579,7 +579,7 @@ export default function DynamicPricingPage() {
                 style={{ width:"100%", padding:"9px 14px 9px 38px", borderRadius:12, border:`1.5px solid ${T.border}`, fontFamily:"'DM Sans',sans-serif", fontSize:".83rem", color:T.ink, background:"#fdfafa" }}/>
             </div>
             <div style={{ display:"flex", gap:6 }}>
-              <button className={`view-btn${viewMode==="table"?" active":""}`} onClick={()=>setViewMode("table")}>📋 Table</button>
+              <button className={`hidden sm:flex view-btn${viewMode==="table"?" active":""}`} onClick={()=>setViewMode("table")}>📋 Table</button>
               <button className={`view-btn${viewMode==="cards"?" active":""}`} onClick={()=>setViewMode("cards")}>🗂️ Cards</button>
             </div>
             <select value={sortBy} onChange={e=>setSortBy(e.target.value)} style={{ padding:"8px 14px", borderRadius:12, border:`1.5px solid ${T.border}`, fontFamily:"'DM Sans',sans-serif", fontSize:".78rem", fontWeight:700, color:T.text, background:"white", cursor:"pointer" }}>
