@@ -72,7 +72,7 @@ function CartItem({ item, onQty, onRemove, index }) {
         <div className="cart-item-top">
           <div>
             <h3 className="item-name">{item.name}</h3>
-            <div className="item-meta-row">
+            <div className="item-meta-row hidden sm:flex">
               <span className="item-meta-chip" style={{ textTransform: "capitalize" }}>Category: {item.category || "Product"}</span>
             </div>
           </div>
@@ -373,7 +373,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="page-root">
+    <div className="page-root overflow-x-hidden">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700&family=Nunito:wght@300;400;500;600;700;800&display=swap');
         *, *::before, *::after { box-sizing: border-box; }
@@ -402,7 +402,7 @@ export default function CartPage() {
         .cart-item-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
         .cart-item-top { display: flex; justify-content: space-between; gap: 12px; }
         .item-name { font-family: 'Playfair Display', serif; font-size: .95rem; font-weight: 600; color: var(--plum); margin-bottom: 4px; }
-        .item-meta-row { display: flex; gap: 6px; flex-wrap: wrap; }
+        .item-meta-row {gap: 6px; flex-wrap: wrap; }
         .item-meta-chip { font-size: .68rem; padding: 2px 10px; border-radius: 20px; background: #fdf0f0; color: #8b3a4a; border: 1px solid var(--border); font-weight: 600; font-family: 'Nunito', sans-serif; }
         .item-price-block { text-align: right; flex-shrink: 0; }
         .item-unit-price { font-weight: 800; color: var(--rose); font-size: 1rem; white-space: nowrap; }
@@ -473,9 +473,9 @@ export default function CartPage() {
         ::-webkit-scrollbar { width: 5px; height: 5px; } ::-webkit-scrollbar-track { background: #fdf8f5; } ::-webkit-scrollbar-thumb { background: #e8a0a0; border-radius: 3px; }
       `}</style>
 
-      <div className="page-inner">
+      <div className="page-inner w-full overflow-x-hidden">
         {/* ── LEFT COLUMN: CART ITEMS ── */}
-        <div>
+        <div className="min-w-0 overflow-hidden">
           <div className="page-heading">
             <p className="page-eyebrow">Your Bag</p>
             <h1 className="page-title">Shopping Cart</h1>
@@ -524,7 +524,7 @@ export default function CartPage() {
 
         {/* ── RIGHT COLUMN: ORDER SUMMARY ── */}
         {items.length > 0 && (
-          <div className="summary-col">
+          <div className="summary-col min-w-0 overflow-hidden">
             <OrderSummary
               items={items}
               discount={discount}

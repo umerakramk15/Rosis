@@ -1273,7 +1273,7 @@ export default function ProductDetailPage() {
       )}
 
       {/* ── STICKY MOBILE CTA ── */}
-      <div
+      {/* <div
         className="sticky bottom-0 lg:hidden bg-white px-4 py-3 flex gap-3"
         style={{
           borderTop: "1.5px solid #f0d8d8",
@@ -1311,7 +1311,7 @@ export default function ProductDetailPage() {
             </>
           )}
         </button>
-      </div>
+      </div> */}
 
       {/* Hide scrollbar style */}
       <style>{`
